@@ -1,12 +1,13 @@
 
-
-export default function Options({ updateFeedback }) {
+import css from "./Options.module.css"
+export default function Options({ onLeaveFeedback, onReset, totalFeedback }) {
     return (
         <div>
-            <ul>
-            <li><button onCLick={() => updateFeedback("good")}>Good</button></li>
-            <li><button onCLick={() => updateFeedback("neutral")}>Neutral</button></li>
-            <li><button onCLick={() => updateFeedback("bad")}>Bad</button></li>
+            <ul className = {css.options}>
+            <li><button onClick={() => onLeaveFeedback("good")}>Good</button></li>
+            <li><button onClick={() => onLeaveFeedback("neutral")}>Neutral</button></li>
+                <li><button onClick={() => onLeaveFeedback("bad")}>Bad</button></li>
+                {totalFeedback > 0 && <li><button onClick={onReset}>Reset</button></li>}
             </ul>
         </div>
     );

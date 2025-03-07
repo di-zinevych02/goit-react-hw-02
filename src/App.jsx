@@ -5,7 +5,9 @@ import Feedback from "./components/Feedback/Feedback"
 
 const App = () => {
   const [feedback, setFeedback] = useState(() => {
+    //// Зчитуємо значення за ключем
     const savedFeedback = localStorage.getItem("feedback");
+    //Якщо на момент завантаження додатка в локальному сховищі нічого не збережено, стан повинен ініціалізуватися нулями.
     return savedFeedback ? JSON.parse(savedFeedback) : {
       good: 0,
       neutral: 0,
@@ -13,6 +15,9 @@ const App = () => {
     };
   });
 
+  useEffect(() => {
+    localStorage.setItem("feedback", JSON.stringify(feedback));
+  }, [feedback]);
   
   const updateFeedback = feedbackType => {
     setFeedback((prevFeedback) => ({
@@ -24,34 +29,20 @@ const resetFeedback = () => {
     setFeedback({ good: 0, neutral: 0, bad: 0 });
 };
   const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
-  const positivePercentage = totalFeedback > 0 ? Math.round((feedback.good / totalFeedback) * 100) : 0;
+  const positiveReviews = totalFeedback > 0 ? Math.round((feedback.good / totalFeedback) * 100) : 0;
   return (
     <>
       <Description />
-      <Options />
-      <Feedback />
+      <Options onLeaveFeedback={updateFeedback} onReset={resetFeedback} totalFeedback={totalFeedback} />
+      {totalFeedback > 0 ? (
+      <Feedback {...feedback} total={totalFeedback} positiveReviews={positiveReviews} />  
+      ) : (
+          <div>
+            <p>No feedback given yet</p>
+            </div>
+      )}
     </>
   );
-  //  const [clicks, setClicks] = useState(() => {
-  //     const savedClicks = window.localStorage.getItem("saved-clicks");
-  //     if (savedClicks !== null) {
-  //       return Number(savedClicks);
-  //     }
-  //     return 0;
-  //   });
-
-  //   useEffect(() => {
-  //     window.localStorage.setItem("saved-clicks", clicks);
-  //   }, [clicks]);
-
-  //   return (
-  //     <div>
-  //       <button onClick={() => setClicks(clicks + 1)}>
-  //         You clicked {clicks} times
-  //       </button>
-  //       <button onClick={() => setClicks(0)}>Reset</button>
-  //     </div>
-  //   );
 };
 
 export default App

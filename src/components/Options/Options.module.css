@@ -1,0 +1,5 @@
+.options {
+    list-style-type: none;
+    display: flex;
+    gap: 12px;
+}
